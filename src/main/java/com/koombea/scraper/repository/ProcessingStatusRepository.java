@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProcessingStatusInterface extends JpaRepository<ProcessingStatus, Integer> {
+public interface ProcessingStatusRepository extends JpaRepository<ProcessingStatus, Integer> {
 }
