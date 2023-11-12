@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProcessingStatusRepository extends JpaRepository<ProcessingStatus, Integer> {
+
+    ProcessingStatus findByDescription(String description);
 }

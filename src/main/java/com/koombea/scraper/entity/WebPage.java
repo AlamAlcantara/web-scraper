@@ -2,10 +2,7 @@ package com.koombea.scraper.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,6 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class WebPage {
 
     @Id
@@ -36,7 +34,7 @@ public class WebPage {
     @JoinColumn(name = "processing_status")
     private ProcessingStatus processingStatus;
 
-    @OneToMany(mappedBy = "webPage")
+    @OneToMany(mappedBy = "webPage", cascade = CascadeType.PERSIST)
     @JsonIgnore
     private List<Link> links;
 }

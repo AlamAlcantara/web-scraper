@@ -13,20 +13,12 @@
   <div class="row">
     <div class="col-md-6 offset-md-3">
 
-      <form method="post"
-               role="form"
-               th:action="@{/links}"
-               class="row">
-        <div class="col-10">
-          <label for="url" class="visually-hidden">Page URL</label>
-          <input type="text" class="form-control" id="url" name="url" placeholder="Add new page" required>
-        </div>
-        <div class="col-2">
-          <button type="submit" class="btn btn-primary mb-3">Scrape</button>
-        </div>
-      </form>
+      <div class="row">
+        <h2>PAGE TITLE</h2>
+      </div>
 
       <br/>
+      <a th:href="@{/links}" th:text="back"/>
 
       <div>
         <table class="table table-striped">
@@ -37,11 +29,9 @@
           </tr>
           </thead>
           <tbody>
-          <tr th:each="page : ${pages}">
-            <td>
-              <a th:href="@{/links/{id} (id = ${page.getId()})}" th:text="${page.getName()}"/>
-            </td>
-            <td th:text="${page.getTotalLinks()}" />
+          <tr th:each="link : ${links}">
+            <td th:text="${link.getBody()}" />
+            <td th:text="${link.getUrl()}" />
           </tr>
           </tbody>
         </table>

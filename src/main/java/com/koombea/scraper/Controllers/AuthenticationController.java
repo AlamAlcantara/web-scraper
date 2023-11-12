@@ -2,7 +2,6 @@ package com.koombea.scraper.Controllers;
 
 
 import com.koombea.scraper.dto.UserDto;
-import com.koombea.scraper.entity.User;
 import com.koombea.scraper.exception.UsernameAlreadyExistsException;
 import com.koombea.scraper.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
