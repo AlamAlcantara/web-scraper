@@ -1,4 +1,4 @@
-package com.koombea.scraper.Controllers;
+package com.koombea.scraper.controllers;
 
 
 import com.koombea.scraper.dto.UserDto;

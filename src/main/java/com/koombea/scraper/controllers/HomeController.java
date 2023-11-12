@@ -1,4 +1,4 @@
-package com.koombea.scraper.Controllers;
+package com.koombea.scraper.controllers;
 
 
 import com.koombea.scraper.dto.LinkDto;
@@ -29,7 +29,7 @@ public class HomeController {
     @GetMapping
     public String index(Model model,
                         @RequestParam(defaultValue = "1") int page,
-                        @RequestParam(defaultValue = "3") int size){
+                        @RequestParam(defaultValue = "10") int size){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -46,7 +46,7 @@ public class HomeController {
     @GetMapping("/{id}")
     public String details(@PathVariable("id") Integer webPageId,
                           @RequestParam(defaultValue = "1") int page,
-                          @RequestParam(defaultValue = "3") int size,
+                          @RequestParam(defaultValue = "10") int size,
                           Model model) {
 
         Pageable paging = PageRequest.of(page-1,size);
@@ -68,7 +68,7 @@ public class HomeController {
 
         this.scraperService.scrapeWeb(url.getUrl(), authentication.getName());
 
-        Pageable paging = PageRequest.of(0,3);
+        Pageable paging = PageRequest.of(0,10);
         Page<WebPageDto> webPageDtoList = this.webPagesService.findByUsername(authentication.getName(), paging);
 
         model.addAttribute("pages", webPageDtoList.getContent());

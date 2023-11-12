@@ -54,10 +54,13 @@ public class ScraperService {
             for (Element anchor: anchors) {
                 String anchorUrl = anchor.attr("href");
                 if(anchorUrl.contains("http://") || anchorUrl.contains("https://")){
+
+                    String body = anchor.text().isEmpty() ? anchor.html() : anchor.text();
+
                     Link link = Link.builder()
                             .webPage(webPage)
                             .url(anchorUrl)
-                            .body(anchor.text().length() > 200 ? anchor.text().substring(0,199) : anchor.text())
+                            .body(body.length() > 200 ? body.substring(0,199) : body)
                             .build();
 
                     links.add(link);
