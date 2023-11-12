@@ -1,7 +1,6 @@
 package com.koombea.scraper.dto;
 
 
-import com.koombea.scraper.entity.ProcessingStatus;
 import lombok.*;
 
 @Getter
@@ -15,6 +14,4 @@ public class WebPageDto {
     private String name;
     private String url;
     private int totalLinks;
-    private String processingStatus;
-
 }

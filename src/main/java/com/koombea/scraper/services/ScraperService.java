@@ -1,11 +1,8 @@
 package com.koombea.scraper.services;
 
 import com.koombea.scraper.entity.Link;
-import com.koombea.scraper.entity.ProcessingStatus;
 import com.koombea.scraper.entity.User;
 import com.koombea.scraper.entity.WebPage;
-import com.koombea.scraper.repository.LinkRepository;
-import com.koombea.scraper.repository.ProcessingStatusRepository;
 import com.koombea.scraper.repository.UserRepository;
 import com.koombea.scraper.repository.WebPageRepository;
 import org.jsoup.Jsoup;
@@ -27,12 +24,6 @@ public class ScraperService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private ProcessingStatusRepository processingStatusRepository;
-
-    @Autowired
-    private LinkRepository linkRepository;
 
     public void scrapeWeb(String url, String username){
         User user = this.userRepository.findByUsername(username);
@@ -62,10 +53,7 @@ public class ScraperService {
                 }
             }
 
-            ProcessingStatus processingStatus = processingStatusRepository.findByDescription("In progress");
-            webPage.setProcessingStatus(processingStatus);
             webPage.setLinks(links);
-
             this.webPageRepository.save(webPage);
 
         } catch (IOException e) {

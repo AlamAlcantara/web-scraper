@@ -30,10 +30,6 @@ public class WebPage {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "processing_status")
-    private ProcessingStatus processingStatus;
-
     @OneToMany(mappedBy = "webPage", cascade = CascadeType.PERSIST)
     @JsonIgnore
     private List<Link> links;

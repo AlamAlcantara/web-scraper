@@ -38,7 +38,6 @@ public class WebPagesService {
                     .name(webPage.get().getName())
                     .totalLinks(webPage.get().getLinks().size())
                     .url(webPage.get().getUrl())
-                    .processingStatus("")
                     .build();
         }
 
@@ -56,7 +55,6 @@ public class WebPagesService {
                     .id(webPage.getId())
                     .name(webPage.getName())
                     .url(webPage.getUrl())
-                    .processingStatus(webPage.getProcessingStatus().getDescription())
                     .totalLinks(webPage.getLinks().size())
                     .build();
             webPageDtoList.add(dto);
