@@ -3,6 +3,8 @@ package com.koombea.scraper.services;
 import com.koombea.scraper.entity.Link;
 import com.koombea.scraper.entity.User;
 import com.koombea.scraper.entity.WebPage;
+import com.koombea.scraper.exception.ScraperException;
+import com.koombea.scraper.exception.ResourceNotFoundException;
 import com.koombea.scraper.repository.UserRepository;
 import com.koombea.scraper.repository.WebPageRepository;
 import org.jsoup.Jsoup;
@@ -15,18 +17,27 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ScraperService {
 
-    @Autowired
     private WebPageRepository webPageRepository;
 
-    @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    public ScraperService(WebPageRepository webPageRepository, UserRepository userRepository) {
+        this.webPageRepository = webPageRepository;
+        this.userRepository = userRepository;
+    }
+
     public void scrapeWeb(String url, String username){
-        User user = this.userRepository.findByUsername(username);
+        Optional<User> user = this.userRepository.findByUsername(username);
+
+        if(!user.isPresent()){
+           throw new ResourceNotFoundException("User not found");
+        }
 
         try {
              Document doc = Jsoup.connect(url).get();
@@ -34,7 +45,7 @@ public class ScraperService {
              WebPage webPage = WebPage.builder()
                      .name(doc.title())
                      .url(url)
-                     .user(user)
+                     .user(user.get())
                      .build();
 
              Elements anchors = doc.getElementsByTag("a");
@@ -57,7 +68,7 @@ public class ScraperService {
             this.webPageRepository.save(webPage);
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ScraperException(e.getMessage());
         }
     }
 

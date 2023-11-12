@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -19,9 +21,9 @@ public class UserService {
 
     public UserDto save(UserDto user) {
 
-        User existingUser = userRepository.findByUsername(user.getUsername());
+        Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
 
-        if(existingUser != null) {
+        if(existingUser.isPresent()) {
             throw new UsernameAlreadyExistsException("Username already exists");
         }
 

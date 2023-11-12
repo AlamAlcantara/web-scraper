@@ -5,6 +5,7 @@ import com.koombea.scraper.dto.LinkDto;
 import com.koombea.scraper.dto.WebPageDto;
 import com.koombea.scraper.entity.Link;
 import com.koombea.scraper.entity.WebPage;
+import com.koombea.scraper.exception.ResourceNotFoundException;
 import com.koombea.scraper.repository.LinkRepository;
 import com.koombea.scraper.repository.WebPageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,26 +21,31 @@ import java.util.Optional;
 @Service
 public class WebPagesService {
 
-    @Autowired
     private WebPageRepository webPageRepository;
 
-    @Autowired
     private LinkRepository linkRepository;
+
+    @Autowired
+    public WebPagesService(WebPageRepository webPageRepository, LinkRepository linkRepository) {
+        this.webPageRepository = webPageRepository;
+        this.linkRepository = linkRepository;
+    }
 
 
     public WebPageDto findById(Integer id) {
 
         Optional<WebPage> webPage = this.webPageRepository.findById(id);
-        WebPageDto dto = new WebPageDto();
 
-
-        if(webPage.isPresent()) {
-            dto = WebPageDto.builder()
-                    .name(webPage.get().getName())
-                    .totalLinks(webPage.get().getLinks().size())
-                    .url(webPage.get().getUrl())
-                    .build();
+        if(!webPage.isPresent()) {
+            throw new ResourceNotFoundException("Webpage not found");
         }
+
+        WebPageDto dto = WebPageDto.builder()
+                .id(webPage.get().getId())
+                .name(webPage.get().getName())
+                .totalLinks(webPage.get().getLinks().size())
+                .url(webPage.get().getUrl())
+                .build();
 
         return dto;
 
