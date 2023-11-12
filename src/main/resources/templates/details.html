@@ -13,8 +13,8 @@
   <div class="row">
     <div class="col-md-6 offset-md-3">
 
-      <div class="row">
-        <h2>PAGE TITLE</h2>
+      <div class="row center">
+        <h2 th:text="${pageTitle}"></h2>
       </div>
 
       <br/>
@@ -36,6 +36,33 @@
           </tbody>
         </table>
       </div>
+
+      <div>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" th:classappend="${currentPage == 1 ? 'disabled' : ''}"
+                 th:href="@{${#httpServletRequest.requestURI}(page=${currentPage - 1})}"
+                 th:text="Previous"/>
+            </li>
+
+            <li class="page-item" th:each="i: ${#numbers.sequence(currentPage - 1, currentPage + 10)}">
+              <a class="page-link"
+                 th:if="${i <= totalPages}"
+                 th:classappend="${currentPage == (i+1) ? 'active' : ''}"
+                 th:href="@{${#httpServletRequest.requestURI}(page=${i+1})}"
+                 th:text="${i+1}"/>
+            </li>
+            <li class="page-item">
+              <a class="page-link"
+                 th:classappend="${currentPage == totalPages ? 'disabled' : ''}"
+                 th:href="@{${#httpServletRequest.requestURI}(page=${currentPage+1})}"
+                 th:text="Next"/>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
     </div>
   </div>
 </div>

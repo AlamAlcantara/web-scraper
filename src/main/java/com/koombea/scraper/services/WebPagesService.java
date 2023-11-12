@@ -8,10 +8,14 @@ import com.koombea.scraper.entity.WebPage;
 import com.koombea.scraper.repository.LinkRepository;
 import com.koombea.scraper.repository.WebPageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WebPagesService {
@@ -23,11 +27,31 @@ public class WebPagesService {
     private LinkRepository linkRepository;
 
 
-    public List<WebPageDto> findByUsername(String username) {
-        List<WebPageDto> webPageDtoList = new ArrayList<>();
-        List<WebPage> webPages = this.webPageRepository.findByUsername(username);
+    public WebPageDto findById(Integer id) {
 
-        for (WebPage webPage : webPages) {
+        Optional<WebPage> webPage = this.webPageRepository.findById(id);
+        WebPageDto dto = new WebPageDto();
+
+
+        if(webPage.isPresent()) {
+            dto = WebPageDto.builder()
+                    .name(webPage.get().getName())
+                    .totalLinks(webPage.get().getLinks().size())
+                    .url(webPage.get().getUrl())
+                    .processingStatus("")
+                    .build();
+        }
+
+        return dto;
+
+    }
+
+    public Page<WebPageDto> findByUsername(String username, Pageable pageable) {
+
+        Page<WebPage> webPagesPage = this.webPageRepository.findByUsername(username, pageable);
+        List<WebPageDto> webPageDtoList = new ArrayList<>();
+
+        for (WebPage webPage : webPagesPage.getContent()) {
             WebPageDto dto = WebPageDto.builder()
                     .id(webPage.getId())
                     .name(webPage.getName())
@@ -38,13 +62,15 @@ public class WebPagesService {
             webPageDtoList.add(dto);
         }
 
-        return webPageDtoList;
+        Page<WebPageDto> webPageDtoPage = new PageImpl<>(webPageDtoList, pageable, webPagesPage.getTotalElements());
+
+        return webPageDtoPage;
     }
 
-    public List<LinkDto> getLinksByWebPageId(Integer id) {
-        List<LinkDto> linkDtos = new ArrayList<>();
+    public Page<LinkDto> getLinksByWebPageId(Integer id, Pageable pageable) {
 
-        List<Link> linkList = this.linkRepository.findByWebPageId(id);
+        Page<Link> linkList = this.linkRepository.findByWebPageId(id, pageable);
+        List<LinkDto> linkDtos = new ArrayList<>();
 
         for (Link l: linkList) {
             LinkDto dto = LinkDto.builder()
@@ -54,7 +80,9 @@ public class WebPagesService {
             linkDtos.add(dto);
         }
 
-        return linkDtos;
+        Page<LinkDto> linkDtoPage = new PageImpl<>(linkDtos, pageable, linkList.getTotalElements());
+
+        return linkDtoPage;
     }
 
 }

@@ -1,6 +1,5 @@
 package com.koombea.scraper.services;
 
-import com.koombea.scraper.dto.WebPageDto;
 import com.koombea.scraper.entity.Link;
 import com.koombea.scraper.entity.ProcessingStatus;
 import com.koombea.scraper.entity.User;
@@ -56,7 +55,7 @@ public class ScraperService {
                     Link link = Link.builder()
                             .webPage(webPage)
                             .url(anchorUrl)
-                            .body(anchor.text())
+                            .body(anchor.text().length() > 200 ? anchor.text().substring(0,199) : anchor.text())
                             .build();
 
                     links.add(link);
